@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Statistik Data Kelompok - SMA Kelas XII</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .tab-btn.active {
+            border-bottom-color: #4f46e5;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-lg text-slate-900 tracking-tight block leading-none">STATISTIKA SMA</span>
+                        <span class="text-xs text-brand-600 font-medium">Data Kelompok Interaktif</span>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-1 lg:space-x-4">
+                    <a href="#tujuan" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition">Tujuan</a>
+                    <a href="#koneksi" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition">Koneksi Nyata</a>
+                    <a href="#histogram-ogive" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition">Histogram & Ogive</a>
+                    <a href="#pemusatan" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition">Pemusatan Data</a>
+                    <a href="#penyebaran" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition">Simpangan Baku</a>
+                    <a href="#simulator" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition">Simulator</a>
+                    <a href="#latihan" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition">Latihan Terbimbing</a>
+                </nav>
+                <div class="hidden sm:block">
+                    <a href="#latihan" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-pen-to-square mr-1.5"></i> Mulai Latihan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-slate-900 via-brand-900 to-indigo-950 text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.15),transparent_50%)]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-300 border border-brand-500/30 mb-4">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i> Matematika Wajib Kelas XII
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                    Pemusatan & Penyebaran Data Kelompok
+                </h1>
+                <p class="text-lg text-slate-300 mb-8 leading-relaxed">
+                    Pelajari konsep penyajian data dalam bentuk Histogram dan Ogive, hingga analisis kuantitatif melalui Rata-rata (Mean), Median, Modus, serta Simpangan Baku secara visual dan interaktif.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#tujuan" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition flex items-center">
+                        Pelajari Sekarang <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#simulator" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-xl font-semibold transition flex items-center backdrop-blur-sm">
+                        <i class="fa-solid fa-calculator mr-2"></i> Simulator Data
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+        <!-- SECTION 1: TUJUAN PEMBELAJARAN -->
+        <section id="tujuan" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 bg-indigo-100 text-brand-600 rounded-lg flex items-center justify-center font-bold text-lg">
+                        1
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Tujuan Pembelajaran</h2>
+                        <p class="text-sm text-slate-500">Capaian pembelajaran yang akan kamu kuasai setelah mempelajari materi ini</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col">
+                        <div class="w-10 h-10 bg-blue-500/10 text-blue-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">1. Visualisasi Data</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Mampu menyusun tabel distribusi frekuensi, menentukan tepi kelas, dan menyajikan data kelompok ke dalam bentuk <strong>Histogram</strong> serta <strong>Ogive (Positif & Negatif)</strong> secara presisi.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col">
+                        <div class="w-10 h-10 bg-indigo-500/10 text-indigo-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">2. Ukuran Pemusatan</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Mampu menghitung dan menginterpretasikan nilai <strong>Mean ($\bar{x}$)</strong>, <strong>Median ($Me$)</strong>, dan <strong>Modus ($Mo$)</strong> pada data berkelompok menggunakan rumus interpolasi.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col">
+                        <div class="w-10 h-10 bg-purple-500/10 text-purple-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-arrows-split-up-and-left"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">3. Ukuran Penyebaran</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Mampu mengukur variabilitas data kelompok dengan menghitung <strong>Ragam / Varians ($S^2$)</strong> dan <strong>Simpangan Baku ($S$)</strong> serta memahami maknanya dalam analisis tingkat keragaman.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: KONEKSI NYATA -->
+        <section id="koneksi" class="scroll-mt-20">
+            <div class="bg-gradient-to-r from-brand-900 to-indigo-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+                <div class="flex items-center space-x-3 mb-6 relative z-10">
+                    <div class="w-10 h-10 bg-white/20 text-white rounded-lg flex items-center justify-center font-bold text-lg backdrop-blur-sm">
+                        2
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Koneksi Nyata (Mengapa Materi Ini Penting?)</h2>
+                        <p class="text-sm text-brand-200">Aplikasi nyata Statistika Data Kelompok di dunia profesional</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 relative z-10">
+                    <div class="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-white/10">
+                        <div class="text-amber-400 text-2xl mb-3"><i class="fa-solid fa-truck-fast"></i></div>
+                        <h3 class="font-bold text-lg text-white mb-2">Logistik & E-Commerce</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed">
+                            Perusahaan seperti Tokopedia atau Shopee mengelompokkan durasi pengiriman barang. Rata-rata dan simpangan baku digunakan untuk menjamin 95% barang sampai dalam rentang waktu yang konsisten.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-white/10">
+                        <div class="text-emerald-400 text-2xl mb-3"><i class="fa-solid fa-industry"></i></div>
+                        <h3 class="font-bold text-lg text-white mb-2">Quality Control Industri</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed">
+                            Pabrik minuman mengukur isi botol (misal 500ml). Jika simpangan baku isi botol terlalu besar, mesin pengisi dianggap rusak karena menghasilkan produk yang heterogen (tidak stabil).
+                        </p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-white/10">
+                        <div class="text-sky-400 text-2xl mb-3"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <h3 class="font-bold text-lg text-white mb-2">Analisis Nilai SNBT / UTBK</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed">
+                            Ratusan ribu skor peserta ujian dikelompokkan dalam Ogive Kumulatif. Ogive ini dipakai untuk menentukan *percentile* batas kelulusan (passing grade) masuk perguruan tinggi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: HISTOGRAM & OGIVE -->
+        <section id="histogram-ogive" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-8">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-indigo-100 text-brand-600 rounded-lg flex items-center justify-center font-bold text-lg">
+                        3
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Penyajian Data: Histogram & Ogive</h2>
+                        <p class="text-sm text-slate-500">Mengenal grafik batang berdempetan dan kurva frekuensi kumulatif</p>
+                    </div>
+                </div>
+
+                <!-- Concept Breakdown -->
+                <div class="grid lg:grid-cols-2 gap-8 items-start">
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-slate-800 border-b pb-2">Komponen Utama Data Kelompok</h3>
+                        <div class="space-y-3 text-sm text-slate-600">
+                            <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-slate-900 block mb-1"><i class="fa-solid fa-ruler-horizontal text-brand-600 mr-2"></i>Batas Bawah ($BB$) & Batas Atas ($BA$)</span>
+                                Nilai terkecil dan terbesar yang membatasi suatu interval kelas.
+                            </div>
+                            <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-slate-900 block mb-1"><i class="fa-solid fa-arrows-left-right text-brand-600 mr-2"></i>Tepi Bawah ($Tb$) & Tepi Atas ($Ta$)</span>
+                                Batas nyata antar kelas. Untuk data ketelitian satuan:
+                                <p class="mt-1 font-mono text-xs text-brand-700 bg-brand-50 p-2 rounded">
+                                    $Tb = BB - 0{,}5 \quad | \quad Ta = BA + 0{,}5$
+                                </p>
+                            </div>
+                            <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-slate-900 block mb-1"><i class="fa-solid fa-arrows-grid-2 text-brand-600 mr-2"></i>Panjang Kelas ($p$)</span>
+                                Selisih antara Tepi Atas dan Tepi Bawah: $p = Ta - Tb$.
+                            </div>
+                            <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-slate-900 block mb-1"><i class="fa-solid fa-chart-line text-brand-600 mr-2"></i>Ogive Positif vs Ogive Negatif</span>
+                                <ul>
+                                    <li>• <strong>Ogive Positif:</strong> Menggunakan Frekuensi Kumulatif Kurang Dari ($\le$) terhadap Tepi Atas. Kurva <em>naik</em>.</li>
+                                    <li>• <strong>Ogive Negatif:</strong> Menggunakan Frekuensi Kumulatif Lebih Dari ($\ge$) terhadap Tepi Bawah. Kurva <em>turun</em>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Chart Preview -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-bold text-slate-800 text-sm">Visualisasi Grafik Interaktif</h4>
+                            <div class="flex space-x-1 bg-slate-200 p-1 rounded-lg text-xs">
+                                <button onclick="renderSampleChart('histogram')" id="btn-histogram" class="px-3 py-1 rounded-md font-medium bg-white text-brand-600 shadow-sm">Histogram</button>
+                                <button onclick="renderSampleChart('ogivePos')" id="btn-ogivePos" class="px-3 py-1 rounded-md font-medium text-slate-600">Ogive (+)</button>
+                                <button onclick="renderSampleChart('ogiveNeg')" id="btn-ogiveNeg" class="px-3 py-1 rounded-md font-medium text-slate-600">Ogive (-)</button>
+                            </div>
+                        </div>
+                        <div class="relative w-full h-64 bg-white rounded-lg p-2 border border-slate-200">
+                            <canvas id="sampleChart"></canvas>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-3 text-center">
+                            Gunakan tombol di atas untuk melihat perbedaan bentuk Histogram, Ogive Positif, dan Ogive Negatif.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Examples for Histogram & Ogive -->
+                <div class="space-y-6 pt-4 border-t">
+                    <h3 class="text-xl font-bold text-slate-900">Contoh Soal & Pembahasan: Histogram & Ogive</h3>
+
+                    <!-- Soal 1 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 font-bold text-xs rounded-md">Contoh Soal 1</span>
+                            <span class="text-xs text-slate-500">Membaca Histogram</span>
+                        </div>
+                        <p class="text-slate-800 text-sm font-medium">
+                            Diberikan histogram hasil tes Matematika dengan tepi-tepi kelas berturut-turut: $49{,}5; 59{,}5; 69{,}5; 79{,}5; 89{,}5; 99{,}5$ dan frekuensi masing-masing batang adalah $4, 8, 15, 10, 3$. Tentukan interval kelas kedua dan total siswa yang mengikuti tes!
+                        </p>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-sm space-y-2">
+                            <p class="font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Pembahasan:</p>
+                            <ol class="list-decimal list-inside text-slate-700 space-y-1">
+                                <li>Tepi kelas kedua dibatasi oleh $Tb_2 = 59{,}5$ dan $Ta_2 = 69{,}5$.</li>
+                                <li>Batas Bawah kelas 2 = $59{,}5 + 0{,}5 = 60$. Batas Atas kelas 2 = $69{,}5 - 0{,}5 = 69$.<br>
+                                   Maka, <strong>Interval kelas kedua adalah 60 – 69</strong>.</li>
+                                <li>Total siswa ($N$) = Jumlah seluruh frekuensi = $4 + 8 + 15 + 10 + 3 = \mathbf{40\text{ siswa}}$.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 font-bold text-xs rounded-md">Contoh Soal 2</span>
+                            <span class="text-xs text-slate-500">Konstruksi Ogive Positif</span>
+                        </div>
+                        <p class="text-slate-800 text-sm font-medium">
+                            Data frekuensi berat badan siswa (kg) disajikan dalam interval: $41-45 \, (f=3)$, $46-50 \, (f=7)$, $51-55 \, (f=12)$, $56-60 \, (f=8)$. Susunlah tabel frekuensi kumulatif kurang dari ($\le$) untuk dasar Ogive Positif!
+                        </p>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-sm space-y-2">
+                            <p class="font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Pembahasan:</p>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-xs text-left border border-slate-200">
+                                    <thead class="bg-slate-100">
+                                        <tr>
+                                            <th class="p-2 border">Tepi Atas ($Ta$)</th>
+                                            <th class="p-2 border">Kategori</th>
+                                            <th class="p-2 border">Frekuensi Kumulatif ($f_k \le$)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200">
+                                        <tr><td class="p-2 border">$40{,}5$</td><td class="p-2 border">$\le 40{,}5$</td><td class="p-2 border">$0$</td></tr>
+                                        <tr><td class="p-2 border">$45{,}5$</td><td class="p-2 border">$\le 45{,}5$</td><td class="p-2 border">$0 + 3 = \mathbf{3}$</td></tr>
+                                        <tr><td class="p-2 border">$50{,}5$</td><td class="p-2 border">$\le 50{,}5$</td><td class="p-2 border">$3 + 7 = \mathbf{10}$</td></tr>
+                                        <tr><td class="p-2 border">$55{,}5$</td><td class="p-2 border">$\le 55{,}5$</td><td class="p-2 border">$10 + 12 = \mathbf{22}$</td></tr>
+                                        <tr><td class="p-2 border">$60{,}5$</td><td class="p-2 border">$\le 60{,}5$</td><td class="p-2 border">$22 + 8 = \mathbf{30}$</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: UKURAN PEMUSATAN DATA -->
+        <section id="pemusatan" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-8">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-indigo-100 text-brand-600 rounded-lg flex items-center justify-center font-bold text-lg">
+                        4
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Ukuran Pemusatan Data Kelompok</h2>
+                        <p class="text-sm text-slate-500">Rataan Hitung (Mean), Nilai Tengah (Median), dan Modus</p>
+                    </div>
+                </div>
+
+                <!-- Formulas Card Grid -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Mean Formula -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-8 h-8 bg-blue-100 text-blue-600 font-bold rounded-lg flex items-center justify-center text-sm">$\bar{x}$</span>
+                            <h3 class="font-bold text-slate-800">Mean (Rataan)</h3>
+                        </div>
+                        <p class="text-xs text-slate-600">Menggunakan nilai titik tengah ($x_i$) tiap kelas:</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                            $$\bar{x} = \frac{\sum (f_i \cdot x_i)}{\sum f_i}$$
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            $x_i = \frac{\text{BB} + \text{BA}}{2}$ (Nilai tengah kelas ke-$i$).
+                        </p>
+                    </div>
+
+                    <!-- Modus Formula -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-8 h-8 bg-amber-100 text-amber-600 font-bold rounded-lg flex items-center justify-center text-sm">$Mo$</span>
+                            <h3 class="font-bold text-slate-800">Modus</h3>
+                        </div>
+                        <p class="text-xs text-slate-600">Nilai pada kelas dengan frekuensi tertinggi:</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                            $$Mo = Tb + \left( \frac{d_1}{d_1 + d_2} \right) \cdot p$$
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            $d_1 = f_{Mo} - f_{\text{sebelum}}$, $d_2 = f_{Mo} - f_{\text{sesudah}}$.
+                        </p>
+                    </div>
+
+                    <!-- Median Formula -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-8 h-8 bg-emerald-100 text-emerald-600 font-bold rounded-lg flex items-center justify-center text-sm">$Me$</span>
+                            <h3 class="font-bold text-slate-800">Median ($Q_2$)</h3>
+                        </div>
+                        <p class="text-xs text-slate-600">Nilai tengah yang membagi data 50% - 50%:</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                            $$Me = Tb + \left( \frac{\frac{1}{2}N - f_k}{f_{Me}} \right) \cdot p$$
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            $f_k$: Frekuensi kumulatif sebelum kelas median.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Examples for Central Tendency -->
+                <div class="space-y-6 pt-4 border-t">
+                    <h3 class="text-xl font-bold text-slate-900">Contoh Soal & Pembahasan: Ukuran Pemusatan</h3>
+
+                    <!-- Tabel Referensi Soal -->
+                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+                        <p class="text-xs font-bold text-indigo-900 uppercase tracking-wider mb-2">Tabel Frekuensi Acuan (Ujian Fisika - 40 Siswa)</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-xs text-center border border-indigo-200 bg-white">
+                                <thead class="bg-indigo-100 font-semibold text-indigo-900">
+                                    <tr>
+                                        <th class="p-2 border">Interval Skor</th>
+                                        <th class="p-2 border">40 – 49</th>
+                                        <th class="p-2 border">50 – 59</th>
+                                        <th class="p-2 border">60 – 69</th>
+                                        <th class="p-2 border">70 – 79</th>
+                                        <th class="p-2 border">80 – 89</th>
+                                        <th class="p-2 border">Total ($N$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-2 border font-bold bg-indigo-50">Frekuensi ($f$)</td>
+                                        <td class="p-2 border">4</td>
+                                        <td class="p-2 border">6</td>
+                                        <td class="p-2 border">14</td>
+                                        <td class="p-2 border">10</td>
+                                        <td class="p-2 border">6</td>
+                                        <td class="p-2 border font-bold">40</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Soal 1 (Mean & Modus) -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 font-bold text-xs rounded-md">Contoh Soal 1</span>
+                            <span class="text-xs text-slate-500">Hitung Mean ($\bar{x}$) dan Modus ($Mo$)</span>
+                        </div>
+                        <p class="text-slate-800 text-sm font-medium">
+                            Berdasarkan tabel acuan di atas, berapakah nilai Rata-rata (Mean) dan Modus skor ujian Fisika tersebut?
+                        </p>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-sm space-y-3">
+                            <p class="font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Pembahasan Langkah Demi Langkah:</p>
+
+                            <div class="space-y-2 text-xs text-slate-700">
+                                <p class="font-semibold text-slate-900">A. Menghitung Mean ($\bar{x}$):</p>
+                                <p>Cari nilai tengah ($x_i$) tiap kelas: $44{,}5; \, 54{,}5; \, 64{,}5; \, 74{,}5; \, 84{,}5$.</p>
+                                <p>$\sum (f_i \cdot x_i) = (4 \times 44{,}5) + (6 \times 54{,}5) + (14 \times 64{,}5) + (10 \times 74{,}5) + (6 \times 84{,}5)$</p>
+                                <p>$\sum (f_i \cdot x_i) = 178 + 327 + 903 + 745 + 507 = \mathbf{2660}$</p>
+                                <p>$\bar{x} = \frac{2660}{40} = \mathbf{66{,}5}$</p>
+
+                                <hr class="my-2">
+
+                                <p class="font-semibold text-slate-900">B. Menghitung Modus ($Mo$):</p>
+                                <p>Frekuensi terbanyak adalah 14 pada kelas <strong>60 – 69</strong>.</p>
+                                <ul class="list-disc list-inside pl-2 space-y-0.5">
+                                    <li>$Tb = 60 - 0{,}5 = 59{,}5$</li>
+                                    <li>$d_1 = 14 - 6 = 8$</li>
+                                    <li>$d_2 = 14 - 10 = 4$</li>
+                                    <li>Panjang kelas $p = 69{,}5 - 59{,}5 = 10$</li>
+                                </ul>
+                                <p>$Mo = 59{,}5 + \left( \frac{8}{8 + 4} \right) \cdot 10 = 59{,}5 + \left( \frac{8}{12} \right) \cdot 10 = 59{,}5 + 6{,}67 = \mathbf{66{,}17}$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 (Median) -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 font-bold text-xs rounded-md">Contoh Soal 2</span>
+                            <span class="text-xs text-slate-500">Hitung Median ($Me$)</span>
+                        </div>
+                        <p class="text-slate-800 text-sm font-medium">
+                            Hitunglah nilai Median dari data tabel acuan ujian Fisika tersebut!
+                        </p>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-sm space-y-2">
+                            <p class="font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Pembahasan:</p>
+                            <ol class="list-decimal list-inside text-xs text-slate-700 space-y-1">
+                                <li>Letak Median = Data ke-$\frac{1}{2} N = \frac{1}{2}(40) = 20$.</li>
+                                <li>Cari frekuensi kumulatif:
+                                    <br> Kelas 1: 4 | Kelas 2: 10 | Kelas 3: 24 (Data ke-20 terletak pada kelas <strong>60 – 69</strong>).
+                                </li>
+                                <li>Komponen rumus:
+                                    <ul class="list-disc list-inside pl-4 my-1">
+                                        <li>$Tb = 59{,}5$</li>
+                                        <li>$f_k = 4 + 6 = 10$</li>
+                                        <li>$f_{Me} = 14$</li>
+                                        <li>$p = 10$</li>
+                                    </ul>
+                                </li>
+                                <li>Hitung Median:
+                                    <p class="font-mono text-xs text-brand-700 bg-brand-50 p-2 rounded mt-1">
+                                        $Me = 59{,}5 + \left( \frac{20 - 10}{14} \right) \cdot 10 = 59{,}5 + \left( \frac{10}{14} \right) \cdot 10 = 59{,}5 + 7{,}14 = \mathbf{66{,}64}$
+                                    </p>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: UKURAN PENYEBARAN DATA -->
+        <section id="penyebaran" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-8">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-indigo-100 text-brand-600 rounded-lg flex items-center justify-center font-bold text-lg">
+                        5
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Ukuran Penyebaran Data: Simpangan Baku</h2>
+                        <p class="text-sm text-slate-500">Mengukur seberapa jauh data tersebar dari nilai rata-ratanya</p>
+                    </div>
+                </div>
+
+                <!-- Theory and Formulas -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-square-root-variable text-purple-600 mr-2"></i> Ragam / Varians ($S^2$)
+                        </h3>
+                        <p class="text-xs text-slate-600">
+                            Rata-rata dari kuadrat selisih setiap titik tengah ($x_i$) terhadap rata-rata ($\bar{x}$):
+                        </p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-center font-mono">
+                            $$S^2 = \frac{\sum f_i (x_i - \bar{x})^2}{\sum f_i}$$
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-chart-line-down text-emerald-600 mr-2"></i> Simpangan Baku / Deviasi Standar ($S$)
+                        </h3>
+                        <p class="text-xs text-slate-600">
+                            Akar kuadrat dari nilai varians, mengembalikan satuan pengukuran ke skala semula:
+                        </p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-center font-mono">
+                            $$S = \sqrt{S^2} = \sqrt{\frac{\sum f_i (x_i - \bar{x})^2}{\sum f_i}}$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meaning Box -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl text-xs text-amber-900 space-y-1">
+                    <p class="font-bold text-sm"><i class="fa-solid fa-lightbulb mr-1"></i> Cara Menginterpretasikan Simpangan Baku ($S$):</p>
+                    <p>• Jika $S$ <strong>semakin kecil</strong> (mendekati 0): Data semakin homogen (seragam) dan berkumpul sangat dekat dengan nilai rata-rata.</p>
+                    <p>• Jika $S$ <strong>semakin besar</strong>: Data semakin heterogen (bervariasi) dan tersebar jauh dari rata-rata.</p>
+                </div>
+
+                <!-- Examples for Standard Deviation -->
+                <div class="space-y-6 pt-4 border-t">
+                    <h3 class="text-xl font-bold text-slate-900">Contoh Soal & Pembahasan: Simpangan Baku</h3>
+
+                    <!-- Soal 1 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 font-bold text-xs rounded-md">Contoh Soal 1</span>
+                            <span class="text-xs text-slate-500">Perhitungan Lengkap Simpangan Baku</span>
+                        </div>
+                        <p class="text-slate-800 text-sm font-medium">
+                            Diberikan tabel sampel tinggi tanaman (cm): kelas $10-14 \, (f=2)$, $15-19 \, (f=4)$, $20-24 \, (f=4)$. Hitunglah nilai Varians dan Simpangan Baku tinggi tanaman tersebut!
+                        </p>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-sm space-y-3">
+                            <p class="font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Pembahasan Langkah Demi Langkah:</p>
+
+                            <p class="text-xs text-slate-700"><strong>Langkah 1: Hitung Rata-Rata ($\bar{x}$)</strong></p>
+                            <ul class="list-disc list-inside text-xs text-slate-700 pl-2">
+                                <li>$x_1 = 12 \rightarrow f_1 x_1 = 2 \times 12 = 24$</li>
+                                <li>$x_2 = 17 \rightarrow f_2 x_2 = 4 \times 17 = 68$</li>
+                                <li>$x_3 = 22 \rightarrow f_3 x_3 = 4 \times 22 = 88$</li>
+                                <li>Total $N = 10$, $\sum f_i x_i = 180 \rightarrow \bar{x} = \frac{180}{10} = \mathbf{18\text{ cm}}$</li>
+                            </ul>
+
+                            <p class="text-xs text-slate-700 mt-2"><strong>Langkah 2: Hitung Tabel Deviasi Kuadrat $\sum f_i (x_i - \bar{x})^2$</strong></p>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-xs text-left border border-slate-200">
+                                    <thead class="bg-slate-100">
+                                        <tr>
+                                            <th class="p-1.5 border">Kelas</th>
+                                            <th class="p-1.5 border">$f_i$</th>
+                                            <th class="p-1.5 border">$x_i$</th>
+                                            <th class="p-1.5 border">$(x_i - \bar{x})$</th>
+                                            <th class="p-1.5 border">$(x_i - \bar{x})^2$</th>
+                                            <th class="p-1.5 border">$f_i(x_i - \bar{x})^2$</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200">
+                                        <tr><td class="p-1.5 border">10 - 14</td><td class="p-1.5 border">2</td><td class="p-1.5 border">12</td><td class="p-1.5 border">$12 - 18 = -6$</td><td class="p-1.5 border">36</td><td class="p-1.5 border">$2 \times 36 = 72$</td></tr>
+                                        <tr><td class="p-1.5 border">15 - 19</td><td class="p-1.5 border">4</td><td class="p-1.5 border">17</td><td class="p-1.5 border">$17 - 18 = -1$</td><td class="p-1.5 border">1</td><td class="p-1.5 border">$4 \times 1 = 4$</td></tr>
+                                        <tr><td class="p-1.5 border">20 - 24</td><td class="p-1.5 border">4</td><td class="p-1.5 border">22</td><td class="p-1.5 border">$22 - 18 = 4$</td><td class="p-1.5 border">16</td><td class="p-1.5 border">$4 \times 16 = 64$</td></tr>
+                                        <tr class="font-bold bg-slate-50"><td class="p-1.5 border" colspan="5">Total ($\sum$)</td><td class="p-1.5 border text-brand-700">140</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p class="text-xs text-slate-700 mt-2"><strong>Langkah 3: Hitung Varians & Simpangan Baku</strong></p>
+                            <p class="text-xs text-slate-700">• Varians ($S^2$) = $\frac{140}{10} = \mathbf{14}$</p>
+                            <p class="text-xs text-slate-700">• Simpangan Baku ($S$) = $\sqrt{14} \approx \mathbf{3{,}74\text{ cm}}$</p>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 font-bold text-xs rounded-md">Contoh Soal 2</span>
+                            <span class="text-xs text-slate-500">Analisis Perbandingan Dua Kelompok</span>
+                        </div>
+                        <p class="text-slate-800 text-sm font-medium">
+                            Dua mesin pabrik (Mesin A dan Mesin B) mengisi kemasan oli. Keduanya memiliki rata-rata volume pengisian yang sama yaitu $1000\text{ ml}$. Namun, setelah dihitung, Simpangan Baku Mesin A adalah $S_A = 1{,}2\text{ ml}$ dan Mesin B adalah $S_B = 8{,}5\text{ ml}$. Mana mesin yang lebih stabil dan layak digunakan? Berikan alasannya!
+                        </p>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-sm space-y-2">
+                            <p class="font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Pembahasan Analitis:</p>
+                            <p class="text-xs text-slate-700 leading-relaxed">
+                                <strong>Mesin A lebih stabil dan jauh lebih layak digunakan.</strong>
+                            </p>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Alasan: Nilai simpangan baku Mesin A ($1{,}2\text{ ml}$) jauh lebih kecil dibandingkan Mesin B ($8{,}5\text{ ml}$). Ini menunjukkan bahwa penyebaran volume oli hasil keluaran Mesin A sangat konsisten mendekati target $1000\text{ ml}$, sedangkan Mesin B memiliki variasi yang tinggi sehingga berisiko menghasilkan kemasan yang terlalu kurang atau berlebih.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: SIMULATOR & KALKULATOR INTERAKTIF -->
+        <section id="simulator" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-indigo-100 text-brand-600 rounded-lg flex items-center justify-center font-bold text-lg">
+                        6
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Simulator & Kalkulator Data Kelompok</h2>
+                        <p class="text-sm text-slate-500">Ubah frekuensi di bawah untuk melihat perubahan nilai statistik & grafik secara realtime!</p>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8">
+                    <!-- Data Input Table -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm">Input Frekuensi Kelas Interval</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-xs text-left border border-slate-200 rounded-lg overflow-hidden">
+                                <thead class="bg-slate-100 text-slate-700 font-semibold">
+                                    <tr>
+                                        <th class="p-2 border">Interval</th>
+                                        <th class="p-2 border">Titik Tengah ($x_i$)</th>
+                                        <th class="p-2 border">Frekuensi ($f$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 font-mono" id="sim-input-body">
+                                    <!-- Dynamic Rows Inserted by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <button onclick="recalculateSimulator()" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2 rounded-lg font-semibold text-sm transition shadow-md">
+                            <i class="fa-solid fa-rotate mr-1"></i> Hitung Ulang & Perbarui Grafik
+                        </button>
+                    </div>
+
+                    <!-- Live Calculation Results -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm">Hasil Perhitungan Otomatis</h3>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-xs text-slate-500 block">Total Data ($N$)</span>
+                                <span id="res-N" class="text-lg font-extrabold text-slate-800">0</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-xs text-slate-500 block">Mean ($\bar{x}$)</span>
+                                <span id="res-mean" class="text-lg font-extrabold text-brand-600">0</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-xs text-slate-500 block">Modus ($Mo$)</span>
+                                <span id="res-mode" class="text-lg font-extrabold text-amber-600">0</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-xs text-slate-500 block">Median ($Me$)</span>
+                                <span id="res-median" class="text-lg font-extrabold text-emerald-600">0</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-xs text-slate-500 block">Varians ($S^2$)</span>
+                                <span id="res-var" class="text-lg font-extrabold text-purple-600">0</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-xs text-slate-500 block">Simpangan Baku ($S$)</span>
+                                <span id="res-sd" class="text-lg font-extrabold text-indigo-600">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Chart Canvas -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h4 class="text-xs font-bold text-slate-700 mb-2">Histogram Live Data</h4>
+                            <div class="h-48 relative">
+                                <canvas id="simChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: LATIHAN SOAL TERBIMBING INTERAKTIF -->
+        <section id="latihan" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-8">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-indigo-100 text-brand-600 rounded-lg flex items-center justify-center font-bold text-lg">
+                        7
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Latihan Soal Terbimbing Interaktif</h2>
+                        <p class="text-sm text-slate-500">Uji pemahamanmu dengan menjawab soal berikut secara mandiri!</p>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Practice Problem 1 -->
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4" id="quiz-1">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-bold rounded-full">Soal Terbimbing #1</span>
+                            <span class="text-xs text-slate-500">Materi: Mean Data Kelompok</span>
+                        </div>
+                        <p class="text-sm font-medium text-slate-800">
+                            Sebuah sampel data berat buah alpukat (gram) dikelompokkan sebagai berikut:
+                            <br><span class="font-mono text-xs text-slate-600">[100-109: f=3], [110-119: f=5], [120-129: f=7], [130-139: f=5]</span>.
+                            <br>Berapakah nilai rata-rata (Mean) dari berat alpukat tersebut?
+                        </p>
+
+                        <div class="grid sm:grid-cols-2 gap-3 pt-2">
+                            <button onclick="checkQuiz(1, 'A', false)" class="q1-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                A. 118,5 gram
+                            </button>
+                            <button onclick="checkQuiz(1, 'B', true)" class="q1-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                B. 120,5 gram
+                            </button>
+                            <button onclick="checkQuiz(1, 'C', false)" class="q1-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                C. 122,0 gram
+                            </button>
+                            <button onclick="checkQuiz(1, 'D', false)" class="q1-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                D. 125,5 gram
+                            </button>
+                        </div>
+
+                        <!-- Feedback Box -->
+                        <div id="q1-feedback" class="hidden p-4 rounded-xl text-xs space-y-2"></div>
+                    </div>
+
+                    <!-- Practice Problem 2 -->
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4" id="quiz-2">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">Soal Terbimbing #2</span>
+                            <span class="text-xs text-slate-500">Materi: Modus Data Kelompok</span>
+                        </div>
+                        <p class="text-sm font-medium text-slate-800">
+                            Data waktu tunggu bus (menit):
+                            <br><span class="font-mono text-xs text-slate-600">[1-5: f=4], [6-10: f=10], [11-15: f=6]</span>.
+                            <br>Berapakah nilai Modus waktu tunggu bus tersebut?
+                        </p>
+
+                        <div class="grid sm:grid-cols-2 gap-3 pt-2">
+                            <button onclick="checkQuiz(2, 'A', false)" class="q2-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                A. 7,5 menit
+                            </button>
+                            <button onclick="checkQuiz(2, 'B', false)" class="q2-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                B. 8,0 menit
+                            </button>
+                            <button onclick="checkQuiz(2, 'C', true)" class="q2-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                C. 8,5 menit
+                            </button>
+                            <button onclick="checkQuiz(2, 'D', false)" class="q2-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                D. 9,2 menit
+                            </button>
+                        </div>
+
+                        <!-- Feedback Box -->
+                        <div id="q2-feedback" class="hidden p-4 rounded-xl text-xs space-y-2"></div>
+                    </div>
+
+                    <!-- Practice Problem 3 -->
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4" id="quiz-3">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full">Soal Terbimbing #3</span>
+                            <span class="text-xs text-slate-500">Materi: Simpangan Baku</span>
+                        </div>
+                        <p class="text-sm font-medium text-slate-800">
+                            Jika suatu data kelompok memiliki nilai Varians ($S^2$) sebesar $25$, maka berapakah nilai Simpangan Baku ($S$) data tersebut?
+                        </p>
+
+                        <div class="grid sm:grid-cols-2 gap-3 pt-2">
+                            <button onclick="checkQuiz(3, 'A', true)" class="q3-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                A. 5
+                            </button>
+                            <button onclick="checkQuiz(3, 'B', false)" class="q3-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                B. 12,5
+                            </button>
+                            <button onclick="checkQuiz(3, 'C', false)" class="q3-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                C. 50
+                            </button>
+                            <button onclick="checkQuiz(3, 'D', false)" class="q3-opt text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-xs font-medium text-slate-700">
+                                D. 625
+                            </button>
+                        </div>
+
+                        <!-- Feedback Box -->
+                        <div id="q3-feedback" class="hidden p-4 rounded-xl text-xs space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-xs text-center">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="text-slate-300 font-semibold">Modul Pembelajaran Interaktif Statistika SMA</p>
+            <p>© 2026 Statistika Data Kelompok - Histogram, Ogive, Pemusatan & Simpangan Baku.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data Sample Static Chart
+        const sampleData = {
+            labels: ['49.5', '59.5', '69.5', '79.5', '89.5', '99.5'],
+            freq: [4, 8, 15, 10, 3],
+            ogivePos: [0, 4, 12, 27, 37, 40],
+            ogiveNeg: [40, 36, 28, 13, 3, 0]
+        };
+
+        let sampleChartObj = null;
+
+        function renderSampleChart(type) {
+            const ctx = document.getElementById('sampleChart').getContext('2d');
+
+            // Button Highlight
+            document.getElementById('btn-histogram').className = "px-3 py-1 rounded-md font-medium text-slate-600";
+            document.getElementById('btn-ogivePos').className = "px-3 py-1 rounded-md font-medium text-slate-600";
+            document.getElementById('btn-ogiveNeg').className = "px-3 py-1 rounded-md font-medium text-slate-600";
+
+            if(type === 'histogram') {
+                document.getElementById('btn-histogram').className = "px-3 py-1 rounded-md font-medium bg-white text-brand-600 shadow-sm";
+            } else if(type === 'ogivePos') {
+                document.getElementById('btn-ogivePos').className = "px-3 py-1 rounded-md font-medium bg-white text-brand-600 shadow-sm";
+            } else {
+                document.getElementById('btn-ogiveNeg').className = "px-3 py-1 rounded-md font-medium bg-white text-brand-600 shadow-sm";
+            }
+
+            if(sampleChartObj) sampleChartObj.destroy();
+
+            if (type === 'histogram') {
+                sampleChartObj = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['50-59', '60-69', '70-79', '80-89', '90-99'],
+                        datasets: [{
+                            label: 'Frekuensi (f)',
+                            data: sampleData.freq,
+                            backgroundColor: 'rgba(79, 70, 229, 0.7)',
+                            borderColor: 'rgba(79, 70, 229, 1)',
+                            borderWidth: 1,
+                            categoryPercentage: 1.0,
+                            barPercentage: 1.0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { title: { display: true, text: 'Interval Kelas' } },
+                            y: { beginAtZero: true, title: { display: true, text: 'Frekuensi' } }
+                        }
+                    }
+                });
+            } else if (type === 'ogivePos') {
+                sampleChartObj = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: sampleData.labels,
+                        datasets: [{
+                            label: 'Frekuensi Kumulatif (<=)',
+                            data: sampleData.ogivePos,
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { title: { display: true, text: 'Tepi Atas (Ta)' } },
+                            y: { beginAtZero: true, title: { display: true, text: 'Frek. Kumulatif' } }
+                        }
+                    }
+                });
+            } else if (type === 'ogiveNeg') {
+                sampleChartObj = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: sampleData.labels,
+                        datasets: [{
+                            label: 'Frekuensi Kumulatif (>=)',
+                            data: sampleData.ogiveNeg,
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { title: { display: true, text: 'Tepi Bawah (Tb)' } },
+                            y: { beginAtZero: true, title: { display: true, text: 'Frek. Kumulatif' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Simulator Interactive Logic
+        const simDataDefault = [
+            { bb: 40, ba: 49, f: 4 },
+            { bb: 50, ba: 59, f: 6 },
+            { bb: 60, ba: 69, f: 14 },
+            { bb: 70, ba: 79, f: 10 },
+            { bb: 80, ba: 89, f: 6 }
+        ];
+
+        let simChartObj = null;
+
+        function initSimulatorTable() {
+            const tbody = document.getElementById('sim-input-body');
+            tbody.innerHTML = '';
+            simDataDefault.forEach((row, idx) => {
+                const xi = (row.bb + row.ba) / 2;
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="p-2 border">${row.bb} - ${row.ba}</td>
+                        <td class="p-2 border text-slate-500">${xi}</td>
+                        <td class="p-2 border">
+                            <input type="number" min="0" id="sim-f-${idx}" value="${row.f}"
+                                class="w-16 p-1 border border-slate-300 rounded text-center font-bold focus:ring-2 focus:ring-brand-500">
+                        </td>
+                    </tr>
+                `;
+            });
+            recalculateSimulator();
+        }
+
+        function recalculateSimulator() {
+            const freqs = [];
+            let N = 0;
+            let sumFX = 0;
+
+            simDataDefault.forEach((row, idx) => {
+                const val = parseInt(document.getElementById(`sim-f-${idx}`).value) || 0;
+                freqs.push(val);
+                row.f = val;
+                N += val;
+                const xi = (row.bb + row.ba) / 2;
+                sumFX += (val * xi);
+            });
+
+            if (N === 0) {
+                alert("Jumlah total frekuensi tidak boleh 0!");
+                return;
+            }
+
+            // Mean
+            const mean = sumFX / N;
+
+            // Modus
+            let maxF = -1;
+            let maxIdx = 0;
+            freqs.forEach((f, i) => {
+                if(f > maxF) { maxF = f; maxIdx = i; }
+            });
+
+            const p = simDataDefault[0].ba - simDataDefault[0].bb + 1;
+            const tbMo = simDataDefault[maxIdx].bb - 0.5;
+            const fPrev = maxIdx > 0 ? freqs[maxIdx - 1] : 0;
+            const fNext = maxIdx < freqs.length - 1 ? freqs[maxIdx + 1] : 0;
+            const d1 = maxF - fPrev;
+            const d2 = maxF - fNext;
+            const mode = (d1 + d2) === 0 ? tbMo : tbMo + (d1 / (d1 + d2)) * p;
+
+            // Median
+            const halfN = N / 2;
+            let cumF = 0;
+            let medIdx = 0;
+            let fkPrev = 0;
+
+            for(let i=0; i<freqs.length; i++) {
+                cumF += freqs[i];
+                if(cumF >= halfN) {
+                    medIdx = i;
+                    fkPrev = cumF - freqs[i];
+                    break;
+                }
+            }
+
+            const tbMe = simDataDefault[medIdx].bb - 0.5;
+            const fMe = freqs[medIdx];
+            const median = fMe === 0 ? tbMe : tbMe + ((halfN - fkPrev) / fMe) * p;
+
+            // Variance & Standard Deviation
+            let sumDevSquare = 0;
+            simDataDefault.forEach((row) => {
+                const xi = (row.bb + row.ba) / 2;
+                sumDevSquare += row.f * Math.pow(xi - mean, 2);
+            });
+
+            const variance = sumDevSquare / N;
+            const sd = Math.sqrt(variance);
+
+            // Render Results
+            document.getElementById('res-N').innerText = N;
+            document.getElementById('res-mean').innerText = mean.toFixed(2);
+            document.getElementById('res-mode').innerText = mode.toFixed(2);
+            document.getElementById('res-median').innerText = median.toFixed(2);
+            document.getElementById('res-var').innerText = variance.toFixed(2);
+            document.getElementById('res-sd').innerText = sd.toFixed(2);
+
+            // Update Chart
+            const ctx = document.getElementById('simChart').getContext('2d');
+            if(simChartObj) simChartObj.destroy();
+
+            simChartObj = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: simDataDefault.map(r => `${r.bb}-${r.ba}`),
+                    datasets: [{
+                        label: 'Frekuensi',
+                        data: freqs,
+                        backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        borderWidth: 1,
+                        categoryPercentage: 1.0,
+                        barPercentage: 1.0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Quiz Logic
+        function checkQuiz(qNum, selectedOpt, isCorrect) {
+            const feedbackEl = document.getElementById(`q${qNum}-feedback`);
+            feedbackEl.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+            if(isCorrect) {
+                feedbackEl.classList.add('bg-emerald-100', 'text-emerald-900');
+                if(qNum === 1) {
+                    feedbackEl.innerHTML = `
+                        <p class="font-bold"><i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Jawaban Benar! (B)</p>
+                        <p>Pembahasan: Nilai tengah xi = [104.5, 114.5, 124.5, 134.5]. Total (f*xi) = 313.5 + 572.5 + 871.5 + 672.5 = 2430. Total N = 20. Mean = 2430 / 20 = <strong>120,5 gram</strong>.</p>
+                    `;
+                } else if(qNum === 2) {
+                    feedbackEl.innerHTML = `
+                        <p class="font-bold"><i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Jawaban Benar! (C)</p>
+                        <p>Pembahasan: Kelas modus = 6 - 10 (f=10). Tb = 5,5. d1 = 10 - 4 = 6. d2 = 10 - 6 = 4. p = 5. Mo = 5,5 + (6 / 10) * 5 = 5,5 + 3 = <strong>8,5 menit</strong>.</p>
+                    `;
+                } else if(qNum === 3) {
+                    feedbackEl.innerHTML = `
+                        <p class="font-bold"><i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Jawaban Benar! (A)</p>
+                        <p>Pembahasan: Simpangan Baku S = sqrt(S^2) = sqrt(25) = <strong>5</strong>.</p>
+                    `;
+                }
+            } else {
+                feedbackEl.classList.add('bg-rose-100', 'text-rose-900');
+                feedbackEl.innerHTML = `
+                    <p class="font-bold"><i class="fa-solid fa-circle-xmark mr-1 text-rose-600"></i> Jawaban Kurang Tepat (${selectedOpt})</p>
+                    <p>Coba periksa kembali langkah perhitunganmu atau baca petunjuk pembahasan di atas!</p>
+                `;
+            }
+        }
+
+        // Initialize KaTeX and Charts on Window Load
+        window.onload = function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
+
+            renderSampleChart('histogram');
+            initSimulatorTable();
+        };
+    </script>
+</body>
+</html>
